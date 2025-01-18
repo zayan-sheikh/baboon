@@ -58,6 +58,7 @@ def rGt  (cod,p) : b=ds.pop(); a=ds.pop(); ds.append(int(a>b))
 def rLt  (cod,p) : b=ds.pop(); a=ds.pop(); ds.append(int(a<b))
 def rSwap(cod,p) : a=ds.pop(); b=ds.pop(); ds.append(a); ds.append(b)
 def rDup (cod,p) : ds.append(ds[-1])
+def rDup2 (cod,p) : ds.append(ds[-1]); ds.append(ds[-3])
 def rDrop(cod,p) : ds.pop()
 def rOver(cod,p) : ds.append(ds[-2])
 def rDump(cod,p) : print("ds = %s" % ds)
@@ -93,6 +94,7 @@ rDict = {
   'dup': rDup, 'swap': rSwap, '.': rDot, 'dump' : rDump,  'drop': rDrop,
   '='  : rEq,  '>'   : rGt,   '<': rLt,
   ','  : rComa,'@'   : rAt, '!'  : rBang,'allot': rAllot,
+  'dup2': rDup2,
 
   'create': rCreate, 'does>': rDoes,
 }
