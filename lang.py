@@ -96,12 +96,21 @@ def doPose(poseName: str):
     
     # add to program file (if no errors)
     plist.append(poseName)
+    
+    
+# Program words to emojis (as list of Unicode codepoints)
+emojiDict = {
+    'zero': '0️⃣', 'one': '1️⃣',
+    'add': '➕', 'dup2': '📝📝',
+    'runFunc': '🏃'
+}
 
 
 def getState():
     """Get the state of the program, including code and stack, as a JSON object."""
     return json.dumps({
-        'program': plist,
+        'program_text': plist,
+        'program_emojis': [emojiDict[p] for p in plist],
         'stack': ds
     })
 
