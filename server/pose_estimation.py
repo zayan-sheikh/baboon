@@ -10,10 +10,27 @@ mp_pose = mp.solutions.pose
 # Initialize model and video capture
 knn = joblib.load('learning/knn_model.pkl')
 cap = cv.VideoCapture(0)
-pose = mp_pose.Pose(min_detection_confidence=0.5, min_tracking_confidence=0.5)
+pose_model = mp_pose.Pose(min_detection_confidence=0.5, min_tracking_confidence=0.5)
+
+# Cached poses from past n frames
+num_to_cache = 10
+pose_cache = []
+
+def most_common(lst):
+    return max(set(lst), key=lst.count)
 
 def get_pose():
-    prediction = None
+    # Returns the most common pose in the cache (may be None)
+    while len(pose_cache) < num_to_cache:
+        pose_cache.append(_predict_pose())
+    
+    mode = most_common(pose_cache)
+    pose_cache.pop(0)
+    return mode
+    
+
+def _predict_pose():
+    # Read frame from camera
     _, frame = cap.read()
 
     # Convert image color for MediaPipe processing
@@ -21,7 +38,7 @@ def get_pose():
     image.flags.writeable = False
 
     # Process the image
-    results = pose.process(image)
+    results = pose_model.process(image)
 
     # If landmarks are found, normalize them and store in the variable
     if results.pose_landmarks:
@@ -40,9 +57,9 @@ def get_pose():
         df = pd.DataFrame(normalized_landmarks, columns=['x', 'y', 'z'])
         dfs = [df]
         flat_df = np.array([dataframe[['x', 'y', 'z']].values.flatten() for dataframe in dfs])
-        prediction = knn.predict(flat_df)
-    
-    return prediction
+        return knn.predict(flat_df)[0]
+    else:
+        return None
 
 
 def normalize_landmarks(landmarks, anchor_point):
@@ -54,5 +71,9 @@ def normalize_landmarks(landmarks, anchor_point):
 
 
 if __name__ == '__main__':
+    last_pose = None
     while True:
-        print(get_pose())
+        pose = get_pose()
+        if pose != last_pose:
+            print(pose)
+        last_pose = pose
