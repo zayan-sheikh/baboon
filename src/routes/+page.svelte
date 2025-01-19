@@ -22,7 +22,7 @@
         </div>
         <div>
             <Switch bind:value={switchValue} design="multi" options={['Text', 'Emoji']}/>
-            <CodeEditor codeLines={switchValue == "Emoji" ? code.emoji : code.text}/>
+            <CodeEditor codeLines={switchValue === "Text" ? code.text : code.emoji}/>
         </div>
     </div>
 </div>
