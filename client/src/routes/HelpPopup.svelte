@@ -1,5 +1,16 @@
 <script>
     export let close;
+    let commandList = [
+        { name: "0", pose: "big O with your arms" },
+        { name: "1", pose: "right hand straight up in the air" },
+        { name: "+", pose: "make a T-pose" },
+        { name: "dup2", pose: "raise both your arms at 90 degrees" },
+        { name: "start", pose: "make an F with your arms to the right" },
+        { name: "end", pose: "put both your hands in front of you as if you're stopping an evil force" },
+        { name: "run", pose: "make a running pose to the right" },
+        { name: "undo", pose: "dab." },
+        { name: "none", pose: "arms by your sides" }
+    ];
 </script>
 
 <div id="default-modal" tabindex="-1" class="flex justify-center items-center overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-full bg-black bg-opacity-50">
@@ -20,13 +31,16 @@
             </div>
             <!-- Modal body -->
             <div class="p-4 md:p-5 space-y-4">
-                <p class="text-base leading-relaxed text-gray-500 dark:text-gray-400">
-                    U: jfkwebgwger <br/>
-                    I: askfhsakfhaskhfa <br/>
-                    I: sajkfbasfsjabfsaf <br/>
-                    A: ashfkashfjshfkash <br/>
-                    A: ajskfasfjasfas
-                </p>
+                <table>
+                    <tbody>
+                    {#each commandList as command}
+                        <tr>
+                            <td class="text-gray-500 w-7 font-mono pr-4">{command.name}</td>
+                            <td class="text-gray-500 flex-1">{command.pose}</td>
+                        </tr>
+                    {/each}
+                    </tbody>
+                </table>
             </div>
         </div>
     </div>
