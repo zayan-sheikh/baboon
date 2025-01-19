@@ -9,7 +9,8 @@ const config = {
 		adapter: adapter(),
 		alias: {
 			"@/*": "./path/to/lib/*",
-		}
+			"xmlhttprequest-ssl": "./node_modules/engine.io-client/lib/xmlhttprequest.js",
+		},
 	}
 };
 
