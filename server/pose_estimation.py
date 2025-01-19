@@ -14,6 +14,7 @@ pose_model = mp_pose.Pose(min_detection_confidence=0.5, min_tracking_confidence=
 
 # Cached poses from past n frames
 num_to_cache = 40
+min_accuracy = 0.75
 pose_cache = []
 
 def most_common(lst):
@@ -25,6 +26,8 @@ def get_pose():
         pose_cache.append(_predict_pose())
     
     mode = most_common(pose_cache)
+    if mode and pose_cache.count(mode) / len(mode) < min_accuracy:
+        mode = None
     pose_cache.pop(0)
     return mode
     
