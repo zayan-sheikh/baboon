@@ -77,6 +77,15 @@ def undo():
     plist = prevState['plist']
 
 
+def clear():
+    global ds, cStack, pcode, plist
+    ds = []
+    cStack = []
+    pcode = []
+    plist = []
+    rDict['runFunc'] = rVoid
+    
+
 def doPose(poseName: str):
     """
     Execute a pose in the program.

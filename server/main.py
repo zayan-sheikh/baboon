@@ -23,6 +23,11 @@ def handle_start_event():
     global running
     running = True
     print("Started")
+    
+    
+@socketio.on('clear')
+def handle_clear_event():
+    lang.clear()
 
 
 def send_state():
