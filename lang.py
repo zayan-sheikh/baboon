@@ -102,7 +102,7 @@ def doPose(poseName: str):
 emojiDict = {
     'zero': '0️⃣', 'one': '1️⃣',
     'add': '➕', 'dup2': '📝📝',
-    'runFunc': '🏃'
+    'runFunc': '🏃', 'startFunc': '🎬', 'endFunc': '🏁'
 }
 
 
