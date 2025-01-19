@@ -21,7 +21,7 @@ def rOne():
 
 def rAdd():
     if len(ds) < 2:
-        raise LangException("add requires two elements on stack")
+        raise LangException("plus requires two elements on stack")
     a = ds.pop()
     b = ds.pop()
     ds.append(a + b)
@@ -55,7 +55,7 @@ def cEndFunc():
 # Dictionary of poses mapping to runtime actions.
 rDict = {
     'zero': rZero, 'one': rOne,
-    'add': rAdd, 'dup2': rDup2,
+    'plus': rAdd, 'dup2': rDup2,
     'runFunc': rVoid  # can be overwritten by custom functions
 }
 
@@ -105,7 +105,7 @@ def doPose(poseName: str):
             pcode.append(rPose)
     else:
         # pose not in dictionaries
-        raise KeyError('Invalid pose')
+        raise KeyError(f'Invalid pose: {poseName}')
     
     # execute
     if not cStack:
@@ -134,7 +134,7 @@ def saveState():
 # Program words to emojis (as list of Unicode codepoints)
 emojiDict = {
     'zero': '0️⃣', 'one': '1️⃣',
-    'add': '➕', 'dup2': '📝📝',
+    'plus': '➕', 'dup2': '📝📝',
     'runFunc': '🏃', 'startFunc': '🎬', 'endFunc': '🏁'
 }
 
