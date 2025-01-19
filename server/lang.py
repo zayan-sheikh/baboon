@@ -19,11 +19,15 @@ def rOne():
     ds.append(1)
 
 def rAdd():
+    if len(ds) < 2:
+        raise LangException("add requires two elements on stack")
     a = ds.pop()
     b = ds.pop()
     ds.append(a + b)
 
 def rDup2():
+    if len(ds) < 2:
+        raise LangException("dup2 requires two elements on stack")
     ds.append(ds[-1])
     ds.append(ds[-3])
     
@@ -90,8 +94,9 @@ def doPose(poseName: str):
         for f in pcode:
             try:
                 f()
-            except IndexError:
-                raise LangException(f"Invalid stack operation")
+            except LangException as err:
+                pcode = []
+                raise err
         pcode = []
     
     # add to program file (if no errors)
