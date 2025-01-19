@@ -33,7 +33,7 @@
         console.log(code.errors);
     })
 
-    // error toast and help popup
+    // functions
     function removeToast(event) {
         code.errors = code.errors.filter( arr =>  arr.id !== event.detail.id )
     }
@@ -42,6 +42,9 @@
         showHelp = !showHelp;
     }
 
+    function clearPage() {
+        socket.emit("clear");
+    }
 
 </script>
 
@@ -56,7 +59,12 @@
             <Camera socket={socket}/>
         </div>
         <div class="px-6 py-4 shadow-xl">
-            <Switch bind:value={switchValue} design="multi" options={['Text', 'Emoji']}/>
+            <div class="flex justify-between align-center">
+                <Switch bind:value={switchValue} design="multi" options={['Text', 'Emoji']}/>
+                <button on:click={clearPage} class="bg-gray-600 hover:bg-red-700 text-white font-bold py-1 px-4 rounded">
+                    Clear
+                </button>
+            </div>
             <CodeEditor codeLines={switchValue === "Text" ? code.program_text : code.program_emojis}/>
         </div>
     </div>
