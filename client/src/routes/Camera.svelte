@@ -1,4 +1,5 @@
 <script>
+    export let socket;
     let videoElement;
     let isCameraActive = false;
     let stream;
@@ -9,6 +10,7 @@
             stream = await navigator.mediaDevices.getUserMedia({ video: true });
             videoElement.srcObject = stream;
             isCameraActive = true;
+            socket.emit("start");
         } catch (error) {
             console.error('Error accessing webcam:', error);
         }
@@ -29,6 +31,8 @@
 
             // Mark camera as inactive
             isCameraActive = false;
+
+            socket.emit("stop");
         }
     };
 
