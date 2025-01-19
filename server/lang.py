@@ -9,6 +9,7 @@ ds       = []  # The data stack
 cStack   = []  # The control structure stack
 pcode    = []  # Saved code to execute or use in fn def
 plist    = []  # List of poses that defines the program
+stateStack = []  # Stack of saved program states
 
 
 # Runtime action functions
@@ -65,12 +66,29 @@ cDict = {
 }
 
 
+def undo():
+    # restore prev state of the program
+    global ds, cStack, pcode, plist
+    stateStack.pop()
+    prevState = stateStack[-1]
+    ds = prevState['ds']
+    cStack = prevState['cStack']
+    pcode = prevState['pcode']
+    plist = prevState['plist']
+
+
 def doPose(poseName: str):
     """
     Execute a pose in the program.
     Pose string must be in rDict or cDict.
     """
     global pcode
+    
+    # handle undo
+    if poseName == 'undo':
+        undo()
+        return
+    
     # fetch
     rPose = rDict.get(poseName)  # is there a runtime action?
     cPose = cDict.get(poseName)  # is there a control flow action?
@@ -99,9 +117,19 @@ def doPose(poseName: str):
                 raise err
         pcode = []
     
-    # add to program file (if no errors)
+    # add to program file and save state (if no errors)
     plist.append(poseName)
+    saveState()
     
+
+def saveState():
+    stateStack.append({
+        'ds': ds[:],
+        'cStack': cStack[:],
+        'pcode': pcode[:],
+        'plist': plist[:]
+    })
+
     
 # Program words to emojis (as list of Unicode codepoints)
 emojiDict = {
