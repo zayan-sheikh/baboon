@@ -11,7 +11,11 @@ socketio = SocketIO(app, cors_allowed_origins='*')
     
 def send_state():
     while True:
-        lang.prompt()  # for testing
+        try:
+            lang.prompt()  # for testing
+        except lang.LangException as err:
+            print(f"Error: {err}")
+            socketio.emit('error', str(err))
         state = lang.getState()
         socketio.emit('state', state)
         print(f"Sent: {state}")
