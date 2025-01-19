@@ -1,13 +1,14 @@
-
+import json
 
 class LangException(Exception):
     """Exception for user issues, should be caught and reported to user"""
     pass
 
 
-ds       = []          # The data stack
-cStack   = []          # The control structure stack
-pcode    = []          # Saved code to execute or use in fn def
+ds       = []  # The data stack
+cStack   = []  # The control structure stack
+pcode    = []  # Saved code to execute or use in fn def
+plist    = []  # List of poses that defines the program
 
 
 # Runtime action functions
@@ -39,9 +40,7 @@ def cStartFunc():
 
 def cEndFunc():
     global pcode
-    if not cStack:
-        raise LangException("Function ended without start")
-    if cStack[-1] != "FUNCTION":
+    if not cStack or cStack[-1] != "FUNCTION":
         raise LangException("Function ended without start")
     cStack.pop()
     rDict['runFunc'] = pcode[:]  # save custom function in rDict
@@ -94,13 +93,24 @@ def doPose(poseName: str):
             except IndexError:
                 raise LangException(f"Invalid stack operation")
         pcode = []
+    
+    # add to program file (if no errors)
+    plist.append(poseName)
+
+
+def getState():
+    """Get the state of the program, including code and stack, as a JSON object."""
+    return json.dumps({
+        'program': plist,
+        'stack': ds
+    })
 
 
 def main():
     """For testing only"""
     while True:
         doPose(input('> '))
-        print(ds)
+        print(getState())
     
     
 if __name__ == '__main__':
