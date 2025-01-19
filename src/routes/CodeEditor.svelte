@@ -1,14 +1,12 @@
 <script>
+    import Switch from './Switch.svelte'
+
     export let codeLines;
+    let switchValue;
 </script>
 
-<div class="mb-4 flex gap-2">
-    <button class="bg-transparent hover:bg-gray-500 font-semibold hover:text-white py-1 px-2 border border-gray-300 hover:border-transparent rounded">
-        ▶︎   Run
-    </button>
-    <button class="bg-transparent hover:bg-gray-500 font-semibold hover:text-white py-1 px-2 border border-gray-300 hover:border-transparent rounded">
-        𝚃   Text View
-    </button>
+<div class="mb-4">
+    <Switch bind:value={switchValue} design="multi" options={['Emoji', 'Text']}/>
 </div>
 
 <div class="bg-gray-900 px-2 py-1 rounded-md">
