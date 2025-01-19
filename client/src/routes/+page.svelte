@@ -10,7 +10,7 @@
         program_text: ["..."],
         program_emojis: ["..."],
         stack: ["..."],
-        error: ""
+        errors: []
     };
 
 
@@ -20,17 +20,18 @@
     });
 
     socket.on('state', (message) => {
-        console.log(message);
-        code = JSON.parse(message);
+        let data = JSON.parse(message);
+        code = {...code, data};
     })
 
     socket.on('error', (message) => {
-        console.log(message);
-        code.error = message;
+        const id = Math.floor(Math.random() * 999);
+        code.errors = [...code.errors, {message, id}];
+        console.log(code.errors);
     })
 
-    function removeToast() {
-        code.error = ""
+    function removeToast(event) {
+        code.errors = code.errors.filter( arr =>  arr.id !== event.detail.id )
     }
 </script>
 
@@ -49,8 +50,8 @@
         </div>
     </div>
     <div class="fixed end-4 bottom-0">
-        {#if code.error && code.error.length > 0}
-            <ErrorToast error={code.error} on:change={removeToast} />
-        {/if}
+        {#each code.errors as error (error.id)}
+            <ErrorToast {error} on:change={removeToast} />
+        {/each}
     </div>
 </div>
