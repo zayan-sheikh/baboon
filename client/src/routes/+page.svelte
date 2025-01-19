@@ -53,7 +53,7 @@
             <CodeEditor codeLines={code.stack}/>
         </div>
         <div>
-            <Camera/>
+            <Camera socket={socket}/>
         </div>
         <div class="px-6 py-4 shadow-xl">
             <Switch bind:value={switchValue} design="multi" options={['Text', 'Emoji']}/>
