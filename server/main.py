@@ -1,24 +1,22 @@
-import asyncio
-from websockets.asyncio.server import serve
+from flask import Flask
+from flask_socketio import SocketIO
+from flask_cors import CORS
 
 import lang
 
-WAIT_TIME = 1
-    
-async def handler(websocket):
-    while True:
-        # update the state with new move
-        lang.prompt()  # for testing
-        # send state to the server
-        state = lang.getState()
-        await websocket.send(state)
-        print(f"Sent: {state}")
-        # await asyncio.sleep(WAIT_TIME)
+app = Flask(__name__)
+CORS(app)
+socketio = SocketIO(app, cors_allowed_origins='*')
 
-async def main():
-    async with serve(handler, "localhost", 6969):
-        await asyncio.get_running_loop().create_future()  # run forever
+    
+def send_state():
+    while True:
+        lang.prompt()  # for testing
+        state = lang.getState()
+        socketio.emit('state', state)
+        print(f"Sent: {state}")
 
 
 if __name__ == "__main__":
-    asyncio.run(main())
+    socketio.start_background_task(send_state)
+    socketio.run(app, host='localhost', port=6969)
