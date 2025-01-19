@@ -29,8 +29,8 @@ def rAdd():
 def rDup2():
     if len(ds) < 2:
         raise LangException("dup2 requires two elements on stack")
-    ds.append(ds[-1])
-    ds.append(ds[-3])
+    ds.append(ds[-2])
+    ds.append(ds[-2])
     
 def rVoid():
     pass
