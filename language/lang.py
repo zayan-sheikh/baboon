@@ -1,0 +1,107 @@
+
+
+class LangException(Exception):
+    """Exception for user issues, should be caught and reported to user"""
+    pass
+
+
+ds       = []          # The data stack
+cStack   = []          # The control structure stack
+pcode    = []          # Saved code to execute or use in fn def
+
+
+# Runtime action functions
+def rZero(): 
+    ds.append(0)
+
+def rOne():
+    ds.append(1)
+
+def rAdd():
+    a = ds.pop()
+    b = ds.pop()
+    ds.append(a + b)
+
+def rDup2():
+    ds.append(ds[-1])
+    ds.append(ds[-3])
+    
+def rVoid():
+    pass
+
+
+# Control flow functions
+def cStartFunc():
+    if cStack: 
+        raise LangException("Function started inside control sequence")
+    cStack.append("FUNCTION")
+
+
+def cEndFunc():
+    global pcode
+    if not cStack:
+        raise LangException("Function ended without start")
+    if cStack[-1] != "FUNCTION":
+        raise LangException("Function ended without start")
+    cStack.pop()
+    rDict['runFunc'] = pcode[:]  # save custom function in rDict
+    pcode = []
+
+
+# Dictionary of poses mapping to runtime actions.
+rDict = {
+    'zero': rZero, 'one': rOne,
+    'add': rAdd, 'dup2': rDup2,
+    'runFunc': rVoid  # can be overwritten by custom functions
+}
+
+
+# Dictionary of poses mapping to control flow.
+cDict = {
+    'startFunc': cStartFunc, 'endFunc': cEndFunc
+}
+
+
+def doPose(poseName: str):
+    """
+    Execute a pose in the program.
+    Pose string must be in rDict or cDict.
+    """
+    global pcode
+    # fetch
+    rPose = rDict.get(poseName)  # is there a runtime action?
+    cPose = cDict.get(poseName)  # is there a control flow action?
+    
+    # compile
+    if cPose:
+        # run control flow actions immediately
+        cPose()
+    elif rPose:
+        if isinstance(rPose, list):
+            # custom defined function
+            pcode += rPose
+        else:
+            pcode.append(rPose)
+    else:
+        # pose not in dictionaries
+        raise KeyError('Invalid pose')
+    
+    # execute
+    if not cStack:
+        for f in pcode:
+            try:
+                f()
+            except IndexError:
+                raise LangException(f"Invalid stack operation")
+        pcode = []
+
+
+def main():
+    """For testing only"""
+    while True:
+        doPose(input('> '))
+        print(ds)
+    
+    
+if __name__ == '__main__':
+    main()

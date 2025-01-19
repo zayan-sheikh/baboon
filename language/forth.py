@@ -1,5 +1,6 @@
 #
-#   forth.py
+#   Example FORTH impl for reference,
+#   from https://www.openbookproject.net/py4fun/forth/forth.html
 #
 import sys, re
 if sys.version > '3' : raw_input = input  # for both 2.7 and 3.0+
