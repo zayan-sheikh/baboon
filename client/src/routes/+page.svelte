@@ -4,8 +4,11 @@
     import Switch from './Switch.svelte'
     import { io } from 'socket.io-client'
     import ErrorToast from "./ErrorToast.svelte";
+    import HelpPopup from "./HelpPopup.svelte";
 
+    // variables
     let switchValue;
+    let showHelp = false;
     let code = {
         program_text: ["..."],
         program_emojis: ["..."],
@@ -13,7 +16,7 @@
         errors: []
     };
 
-
+    // socket stuff
     const socket = io.connect('http://localhost:6969');
     socket.on("connect", () => {
         console.log(socket.id);
@@ -30,12 +33,20 @@
         console.log(code.errors);
     })
 
+    // error toast and help popup
     function removeToast(event) {
         code.errors = code.errors.filter( arr =>  arr.id !== event.detail.id )
     }
+
+    function toggleHelp() {
+        showHelp = !showHelp;
+    }
+
+
 </script>
 
 <div class="flex">
+    <!--3 Main Columns-->
     <div class="w-full grid grid-cols-3">
         <div class="px-6 py-4 shadow-xl">
             <p class="text-lg font-bold">Runtime Stack</p>
@@ -49,9 +60,21 @@
             <CodeEditor codeLines={switchValue === "Text" ? code.program_text : code.program_emojis}/>
         </div>
     </div>
-    <div class="fixed end-4 bottom-0">
+
+    <!--Error Toast and Help Popup-->
+    <div class="fixed inset-x-4 bottom-0">
         {#each code.errors as error (error.id)}
             <ErrorToast {error} on:change={removeToast} />
         {/each}
+    </div>
+    <div class="fixed end-8 bottom-6">
+        <button on:click={toggleHelp} class="bg-white hover:bg-gray-200 rounded-full w-12 h-12">
+            <span class="text-black text-xl">?</span>
+        </button>
+    </div>
+    <div>
+        {#if showHelp}
+            <HelpPopup close={toggleHelp}/>
+        {/if}
     </div>
 </div>
