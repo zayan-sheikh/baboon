@@ -23,15 +23,15 @@
 </script>
 
 <div class="flex">
-    <div class="w-full m-4 grid grid-cols-3 gap-4">
-        <div>
+    <div class="w-full grid grid-cols-3">
+        <div class="p-4 shadow-xl">
             <p class="text-lg font-bold">Runtime Stack</p>
             <CodeEditor codeLines={stack}/>
         </div>
         <div>
             <Camera/>
         </div>
-        <div>
+        <div class="p-4 shadow-xl">
             <Switch bind:value={switchValue} design="multi" options={['Text', 'Emoji']}/>
             <CodeEditor codeLines={switchValue === "Text" ? code.text : code.emoji}/>
         </div>
