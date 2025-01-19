@@ -45,6 +45,12 @@
 
     function clearPage() {
         socket.emit("clear");
+        code = {
+            program_text: ["..."],
+            program_emojis: ["..."],
+            stack: ["..."],
+            errors: []
+        };
     }
 
 </script>
