@@ -14,7 +14,7 @@ pose_model = mp_pose.Pose(min_detection_confidence=0.5, min_tracking_confidence=
 
 # Cached poses from past n frames
 num_to_cache = 60
-min_accuracy = 0.9
+min_accuracy = 0.8
 pose_cache = []
 
 def most_common(lst):

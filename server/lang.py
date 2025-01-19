@@ -69,12 +69,17 @@ cDict = {
 def undo():
     # restore prev state of the program
     global ds, cStack, pcode, plist
-    stateStack.pop()
-    prevState = stateStack[-1]
-    ds = prevState['ds']
-    cStack = prevState['cStack']
-    pcode = prevState['pcode']
-    plist = prevState['plist']
+    if len(stateStack) == 1:
+        clear()
+    elif len(stateStack) == 0:
+        raise LangException("Too early to undo")
+    else:
+        stateStack.pop()
+        prevState = stateStack[-1]
+        ds = prevState['ds']
+        cStack = prevState['cStack']
+        pcode = prevState['pcode']
+        plist = prevState['plist']
 
 
 def clear():
