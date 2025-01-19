@@ -23,8 +23,9 @@
     });
 
     socket.on('state', (message) => {
+        console.log(message)
         let data = JSON.parse(message);
-        code = {...code, data};
+        code = {...code, ...data};
     })
 
     socket.on('error', (message) => {
