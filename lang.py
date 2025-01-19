@@ -111,7 +111,12 @@ def main():
     while True:
         doPose(input('> '))
         print(getState())
-    
+        
+
+def prompt():
+    """For testing only"""
+    doPose(input('> '))
+
     
 if __name__ == '__main__':
     main()
