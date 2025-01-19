@@ -13,7 +13,7 @@ cap = cv.VideoCapture(0)
 pose_model = mp_pose.Pose(min_detection_confidence=0.5, min_tracking_confidence=0.5)
 
 # Cached poses from past n frames
-num_to_cache = 10
+num_to_cache = 40
 pose_cache = []
 
 def most_common(lst):
