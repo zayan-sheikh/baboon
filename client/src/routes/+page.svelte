@@ -2,6 +2,17 @@
     import CodeEditor from "./CodeEditor.svelte";
     import Camera from "./Camera.svelte";
     import Switch from './Switch.svelte'
+    import { io } from 'socket.io-client'
+
+    const socket = io.connect('http://localhost:6969');
+
+    socket.on('eventFromServer', (message) => {
+        console.log(message);
+    })
+    // $: {
+    //     // send message to server
+    //     socket.emit('eventFromClient', $reactiveValue)
+    // }
 
     let switchValue;
     let stack = ["sajhdashd","asdgsagdsd"];
