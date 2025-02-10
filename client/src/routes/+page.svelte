@@ -63,7 +63,7 @@
         <div class="sstext">
           <h1>baboon</h1>
           <div class="text-wrapper">
-            <p>The world's first motion-based programming language.</p>
+            <p>The world's first motion-based programming language. </p>
           </div>
         </div>
       </div>
