@@ -1,5 +1,7 @@
-# nwhacks25
-Hackathon Project for nwHacks
+# Baboon
+The world's first motion-based programming language!
+
+[Check out our devpost here](https://devpost.com/software/baboon)
 
 ## To Run
 1. In the root directory, create a virtual environment using python 3.10 (mediapipe isn't supported for later versions)
