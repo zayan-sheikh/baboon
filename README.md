@@ -1,6 +1,12 @@
 # Baboon
 The world's first motion-based programming language!
 
+
+
+
+https://github.com/user-attachments/assets/466f0bbe-2901-414d-b4db-915f4d04e3fe
+
+
 [Check out our devpost here](https://devpost.com/software/baboon)
 
 ## To Run
