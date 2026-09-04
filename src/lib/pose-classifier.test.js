@@ -32,3 +32,18 @@ test('stabilizes predictions over the original 60-frame window', () => {
   }
   assert.equal(stabilizer.add('one'), 'one');
 });
+
+test('requires the configured share of the window before accepting a pose', () => {
+  const belowThreshold = new PoseStabilizer();
+  const atThreshold = new PoseStabilizer();
+
+  for (let frame = 0; frame < 60; frame += 1) {
+    belowThreshold.add(frame < 47 ? 'one' : 'zero');
+  }
+  for (let frame = 0; frame < 59; frame += 1) {
+    atThreshold.add(frame < 48 ? 'one' : 'zero');
+  }
+
+  assert.equal(belowThreshold.add('zero'), null);
+  assert.equal(atThreshold.add('zero'), 'one');
+});

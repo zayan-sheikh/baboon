@@ -36,6 +36,8 @@ export class PoseEstimator {
   }
 
   predict(video, timestamp) {
+    if (!this.landmarker || !this.model) return undefined;
+
     const result = this.landmarker.detectForVideo(video, timestamp);
     const landmarks = result.landmarks[0];
     const prediction = landmarks

@@ -18,7 +18,7 @@
   };
 
   function addError(message) {
-    const id = Math.floor(Math.random() * 999);
+    const id = crypto.randomUUID();
     code.errors = [...code.errors, { message, id }];
     console.log(code.errors);
   }

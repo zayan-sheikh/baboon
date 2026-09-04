@@ -106,6 +106,7 @@ export class BaboonLanguage {
       this.controlStack = [...previousState.controlStack];
       this.pendingCode = [...previousState.pendingCode];
       this.program = [...previousState.program];
+      this.runFunction = [...previousState.runFunction];
     }
   }
 
@@ -122,7 +123,8 @@ export class BaboonLanguage {
       dataStack: [...this.dataStack],
       controlStack: [...this.controlStack],
       pendingCode: [...this.pendingCode],
-      program: [...this.program]
+      program: [...this.program],
+      runFunction: [...this.runFunction]
     });
   }
 

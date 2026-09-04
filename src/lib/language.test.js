@@ -32,6 +32,17 @@ test('undo restores the preceding successful state', () => {
   assert.deepEqual(language.getState().program_text, ['zero']);
 });
 
+test('undo restores the function definition from the target state', () => {
+  const language = new BaboonLanguage();
+  for (const pose of ['startFunc', 'one', 'endFunc', 'zero']) language.doPose(pose);
+
+  language.doPose('undo');
+  assert.deepEqual(language.runFunction, ['one']);
+
+  language.doPose('undo');
+  assert.deepEqual(language.runFunction, []);
+});
+
 test('reports the same user-facing stack errors as the Python runtime', () => {
   const language = new BaboonLanguage();
   assert.throws(() => language.doPose('plus'), new LanguageError('plus requires two elements on stack'));

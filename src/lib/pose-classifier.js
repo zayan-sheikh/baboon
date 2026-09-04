@@ -59,8 +59,7 @@ export class PoseStabilizer {
       if (count > counts.get(mode)) mode = poseName;
     }
 
-    // Keep the original runtime's confidence calculation for behavioral parity.
-    if (mode && counts.get(mode) / mode.length < this.minimumAccuracy) mode = null;
+    if (mode && counts.get(mode) / this.windowSize < this.minimumAccuracy) mode = null;
 
     this.cache.shift();
     return mode;

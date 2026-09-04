@@ -13,7 +13,7 @@
   const estimator = new PoseEstimator();
 
   const predictPose = () => {
-    if (!isCameraActive) return;
+    if (!isCameraActive || !videoElement) return;
 
     if (videoElement.currentTime !== lastVideoTime) {
       lastVideoTime = videoElement.currentTime;
