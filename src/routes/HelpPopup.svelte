@@ -13,12 +13,12 @@
     ];
 </script>
 
-<div id="default-modal" tabindex="-1" class="flex justify-center items-center overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-full bg-black bg-opacity-50">
-    <div class="relative p-4 w-full max-w-2xl max-h-full">
+<div id="default-modal" tabindex="-1" class="fixed inset-0 z-50 flex h-full w-full items-center justify-center overflow-x-hidden overflow-y-auto bg-black bg-opacity-50">
+    <div class="relative w-full max-w-2xl p-3 sm:p-4">
         <!-- Modal content -->
-        <div class="relative bg-white rounded-lg shadow dark:bg-gray-700">
+        <div class="relative max-h-[85svh] overflow-y-auto rounded-lg bg-white shadow dark:bg-gray-700">
             <!-- Modal header -->
-            <div class="flex items-center justify-between p-4 md:p-5 border-b rounded-t dark:border-gray-600">
+            <div class="sticky top-0 flex items-center justify-between rounded-t border-b bg-white p-4 dark:border-gray-600 dark:bg-gray-700 md:p-5">
                 <h3 class="text-xl font-semibold text-gray-900 dark:text-white">
                     Command List
                 </h3>
@@ -30,13 +30,13 @@
                 </button>
             </div>
             <!-- Modal body -->
-            <div class="p-4 md:p-5 space-y-4">
-                <table>
+            <div class="space-y-4 p-4 md:p-5">
+                <table class="w-full text-sm sm:text-base">
                     <tbody>
                     {#each commandList as command}
-                        <tr>
-                            <td class="text-gray-500 w-7 font-mono pr-4">{command.name}</td>
-                            <td class="text-gray-500 flex-1">{command.pose}</td>
+                        <tr class="align-top">
+                            <td class="w-7 py-2 pr-4 font-mono text-gray-500">{command.name}</td>
+                            <td class="py-2 text-gray-500">{command.pose}</td>
                         </tr>
                     {/each}
                     </tbody>

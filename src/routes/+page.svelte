@@ -52,13 +52,13 @@
   }
 </script>
 
-<div class="flex">
+<main class="min-h-screen">
   <!--3 Main Columns-->
-  <div class="w-full grid grid-cols-3">
+  <div class="grid w-full grid-cols-1 lg:grid-cols-3">
     <div class="overlay">
-      <div class="splashscreen-text">
-        <img src="baboon.svg" alt="Baboon" width="25%" />
-        <div class="sstext">
+      <div class="splashscreen-text px-6">
+        <img src="baboon.svg" alt="Baboon" class="w-24 sm:w-1/4 sm:max-w-xs" />
+        <div class="sstext text-center sm:text-left">
           <h1>baboon</h1>
           <div class="text-wrapper">
             <p>The world's first motion-based programming language. </p>
@@ -66,15 +66,15 @@
         </div>
       </div>
     </div>
-    <div class="px-6 py-4 shadow-xl">
+    <section class="order-2 px-4 py-5 shadow-xl sm:px-6 lg:order-1 lg:min-h-screen lg:py-4">
       <p class="text-lg font-bold">Runtime Stack</p>
       <CodeEditor codeLines={code.stack} />
-    </div>
-    <div>
+    </section>
+    <div class="order-1 lg:order-2">
       <Camera onPose={handlePose} />
     </div>
-    <div class="px-6 py-4 shadow-xl">
-      <div class="flex justify-between align-center">
+    <section class="order-3 px-4 py-5 shadow-xl sm:px-6 lg:min-h-screen lg:py-4">
+      <div class="flex flex-wrap items-center justify-between gap-4">
         <Switch
           bind:value={switchValue}
           design="multi"
@@ -92,16 +92,16 @@
           ? code.program_text
           : code.program_emojis}
       />
-    </div>
+    </section>
   </div>
 
   <!--Error Toast and Help Popup-->
-  <div class="fixed inset-x-4 bottom-0">
+  <div class="fixed inset-x-4 bottom-0 z-50">
     {#each code.errors as error (error.id)}
       <ErrorToast {error} on:change={removeToast} />
     {/each}
   </div>
-  <div class="fixed end-8 bottom-6">
+  <div class="fixed end-4 bottom-4 sm:end-8 sm:bottom-6">
     <button
       on:click={toggleHelp}
       class="bg-white hover:bg-gray-200 rounded-full w-12 h-12"
@@ -114,4 +114,4 @@
       <HelpPopup close={toggleHelp} />
     {/if}
   </div>
-</div>
+</main>

@@ -72,13 +72,13 @@
 </script>
 
 <div
-  class="flex flex-col items-center justify-center w-full h-screen bg-gray-900 gap-2"
+  class="flex h-[65svh] min-h-[28rem] w-full flex-col items-center gap-2 bg-gray-900 pt-3 lg:h-screen lg:min-h-0 lg:pt-0"
 >
-  <div class="inline-flex items-center gap-2">
-    <img src="/baboon.svg" alt="logo" class="h-12 w-12" />
-    <p class="font text-2xl">baboon</p>
+  <div class="inline-flex flex-none items-center gap-2">
+    <img src="/baboon.svg" alt="logo" class="h-10 w-10 sm:h-12 sm:w-12" />
+    <p class="text-xl sm:text-2xl">baboon</p>
   </div>
-  <div class="relative w-full h-screen">
+  <div class="relative min-h-0 w-full flex-1">
     <!-- svelte-ignore a11y_media_has_caption -->
     <video
       bind:this={videoElement}
@@ -87,18 +87,18 @@
       class="w-full h-full object-cover"
     ></video>
 
-    <div class="absolute bottom-5 left-1/2 transform -translate-x-1/2">
+    <div class="absolute bottom-4 left-1/2 -translate-x-1/2 transform sm:bottom-5">
       {#if isCameraActive}
         <button
           on:click={stopCamera}
-          class="px-6 py-2 bg-red-600 text-white font-semibold rounded-full shadow-lg"
+          class="whitespace-nowrap rounded-full bg-red-600 px-6 py-2 font-semibold text-white shadow-lg"
         >
           Stop Camera
         </button>
       {:else}
         <button
           on:click={startCamera}
-          class="px-6 py-2 bg-blue-600 text-white font-semibold rounded-full shadow-lg"
+          class="whitespace-nowrap rounded-full bg-blue-600 px-6 py-2 font-semibold text-white shadow-lg"
         >
           Start Camera
         </button>

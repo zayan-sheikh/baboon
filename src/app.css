@@ -61,6 +61,7 @@ input {
     flex-direction: row;
     align-items: center;
     justify-content: center;
+    gap: 0.75rem;
     opacity: 0%;
     animation: fadeIn 2s ease-out forwards, bounceScale 3s ease-in-out infinite;
 }
@@ -88,7 +89,8 @@ input {
 }
 
 .sstext h1 {
-    font-size: 60pt;
+    font-size: clamp(3.5rem, 15vw, 5rem);
+    line-height: 0.95;
     font-weight: 650;
     letter-spacing: -0.055em;
     animation: slideUp 2s ease-out forwards;
@@ -106,13 +108,27 @@ input {
 .text-wrapper {
     position: relative;
     overflow: hidden; /* Hides content before animation */
-    height: 2rem; /* Adjust based on text size */
+    height: 3.5rem;
 }
 
 .sstext p {
+    max-width: 22rem;
+    line-height: 1.4;
     transform: translateX(1%) translateY(-100%);  /* Start hidden above */
     animation: slideDown 2s ease-out forwards;
     
+}
+
+@media (max-width: 639px) {
+    .splashscreen-text {
+        flex-direction: column;
+    }
+}
+
+@media (min-width: 640px) {
+    .text-wrapper {
+        height: 2rem;
+    }
 }
 
 @keyframes slideDown {
