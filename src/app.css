@@ -1,3 +1,5 @@
+@import '@fontsource-variable/inter';
+@import '@fontsource-variable/jetbrains-mono';
 @import 'tailwindcss/base';
 @import 'tailwindcss/components';
 @import 'tailwindcss/utilities';
@@ -5,6 +7,18 @@
 body {
     background-color: #1E293B;
     color: white;
+    font-family: 'Inter Variable', Inter, ui-sans-serif, system-ui, sans-serif;
+    font-optical-sizing: auto;
+    font-feature-settings: 'cv02', 'cv03', 'cv04', 'cv11';
+    letter-spacing: -0.01em;
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+button,
+input {
+    font: inherit;
 }
 
 .overlay{
@@ -74,8 +88,9 @@ body {
 }
 
 .sstext h1 {
-    
     font-size: 60pt;
+    font-weight: 650;
+    letter-spacing: -0.055em;
     animation: slideUp 2s ease-out forwards;
     transform: translateY(25%);
     margin: 0;
