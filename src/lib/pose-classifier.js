@@ -14,12 +14,20 @@ export function predictKnn(features, model) {
     throw new Error(`Expected ${model.samples[0]?.length ?? 0} pose features, received ${features.length}`);
   }
 
+  const queryScale = getShoulderScale(features);
   const nearest = model.samples
     .map((sample, index) => {
+      const sampleScale = getShoulderScale(sample);
       let squaredDistance = 0;
       for (let feature = 0; feature < sample.length; feature += 1) {
-        const delta = features[feature] - sample[feature];
-        squaredDistance += delta * delta;
+        const landmark = Math.floor(feature / 3);
+        const weight = landmark >= 11 && landmark <= 22
+          ? 2
+          : landmark >= 23
+            ? 0.15
+            : 0.35;
+        const delta = features[feature] / queryScale - sample[feature] / sampleScale;
+        squaredDistance += weight * delta * delta;
       }
       return { distance: squaredDistance, index, label: model.labels[index] };
     })
@@ -28,7 +36,8 @@ export function predictKnn(features, model) {
 
   const votes = new Map(model.classes.map((label) => [label, 0]));
   for (const neighbor of nearest) {
-    votes.set(neighbor.label, votes.get(neighbor.label) + 1);
+    const voteWeight = 1 / (Math.sqrt(neighbor.distance) + 1e-6);
+    votes.set(neighbor.label, votes.get(neighbor.label) + voteWeight);
   }
 
   let prediction = model.classes[0];
@@ -38,8 +47,17 @@ export function predictKnn(features, model) {
   return prediction;
 }
 
+function getShoulderScale(features) {
+  const leftShoulder = 11 * 3;
+  const rightShoulder = 12 * 3;
+  const dx = features[leftShoulder] - features[rightShoulder];
+  const dy = features[leftShoulder + 1] - features[rightShoulder + 1];
+  const dz = features[leftShoulder + 2] - features[rightShoulder + 2];
+  return Math.max(Math.hypot(dx, dy, dz), 1e-6);
+}
+
 export class PoseStabilizer {
-  constructor(windowSize = 60, minimumAccuracy = 0.8) {
+  constructor(windowSize = 20, minimumAccuracy = 0.65) {
     this.windowSize = windowSize;
     this.minimumAccuracy = minimumAccuracy;
     this.cache = [];

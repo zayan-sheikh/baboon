@@ -8,6 +8,7 @@
 		"build": "vite build",
 		"preview": "vite preview",
 		"test": "node --test",
+		"benchmark:recognition": "node scripts/benchmark-recognition.js",
 		"check": "svelte-kit sync && svelte-check --tsconfig ./jsconfig.json"
 	},
 	"devDependencies": {
