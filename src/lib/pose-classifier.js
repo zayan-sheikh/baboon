@@ -34,9 +34,11 @@ export function predictKnn(features, model) {
     .sort((a, b) => a.distance - b.distance || a.index - b.index)
     .slice(0, model.k);
 
+  if (nearest[0]?.distance <= 1e-12) return nearest[0].label;
+
   const votes = new Map(model.classes.map((label) => [label, 0]));
   for (const neighbor of nearest) {
-    const voteWeight = 1 / (Math.sqrt(neighbor.distance) + 1e-6);
+    const voteWeight = 1 / Math.max(Math.sqrt(neighbor.distance), 1e-6);
     votes.set(neighbor.label, votes.get(neighbor.label) + voteWeight);
   }
 
@@ -53,7 +55,18 @@ function getShoulderScale(features) {
   const dx = features[leftShoulder] - features[rightShoulder];
   const dy = features[leftShoulder + 1] - features[rightShoulder + 1];
   const dz = features[leftShoulder + 2] - features[rightShoulder + 2];
-  return Math.max(Math.hypot(dx, dy, dz), 1e-6);
+  const shoulderScale = Math.hypot(dx, dy, dz);
+  if (Number.isFinite(shoulderScale) && shoulderScale > 1e-6) return shoulderScale;
+
+  let squaredRadius = 0;
+  let coordinateCount = 0;
+  for (const coordinate of features) {
+    if (!Number.isFinite(coordinate)) continue;
+    squaredRadius += coordinate * coordinate;
+    coordinateCount += 1;
+  }
+  const fallbackScale = Math.sqrt(squaredRadius / Math.max(coordinateCount, 1));
+  return Number.isFinite(fallbackScale) && fallbackScale > 1e-6 ? fallbackScale : 1;
 }
 
 export class PoseStabilizer {

@@ -29,6 +29,16 @@ test('keeps predictions stable as the subject moves closer or farther away', () 
   }
 });
 
+test('handles exact matches without unstable vote weights', () => {
+  assert.equal(predictKnn(model.samples[0], model), model.labels[0]);
+});
+
+test('falls back safely when shoulder width is zero', () => {
+  const pose = [...model.samples[0]];
+  pose.splice(12 * 3, 3, ...pose.slice(11 * 3, 11 * 3 + 3));
+  assert.doesNotThrow(() => predictKnn(pose, model));
+});
+
 test('stabilizes predictions over the responsive 20-frame window', () => {
   const stabilizer = new PoseStabilizer();
   for (let frame = 0; frame < 19; frame += 1) {
