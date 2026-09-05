@@ -1,5 +1,4 @@
 import assert from 'node:assert/strict';
-import { createHash } from 'node:crypto';
 import { readFile } from 'node:fs/promises';
 import test from 'node:test';
 import { normalizeLandmarks, PoseStabilizer, predictKnn } from './pose-classifier.js';
@@ -18,16 +17,31 @@ test('normalizes all pose coordinates relative to the nose', () => {
   );
 });
 
-test('reproduces the scikit-learn KNN predictions', () => {
+test('recognizes every training pose', () => {
   const predictions = model.samples.map((sample) => predictKnn(sample, model));
-  const digest = createHash('sha256').update(predictions.join('\n')).digest('hex');
-
-  assert.equal(digest, 'eb0d78834417b01a44f37f3e5e354c086a85eb81920d42894413088f57d4a313');
+  assert.deepEqual(predictions, model.labels);
 });
 
-test('stabilizes predictions over the original 60-frame window', () => {
+test('keeps predictions stable as the subject moves closer or farther away', () => {
+  for (let index = 0; index < model.samples.length; index += 1) {
+    const scaledPose = model.samples[index].map((coordinate) => coordinate * 0.6);
+    assert.equal(predictKnn(scaledPose, model), model.labels[index]);
+  }
+});
+
+test('handles exact matches without unstable vote weights', () => {
+  assert.equal(predictKnn(model.samples[0], model), model.labels[0]);
+});
+
+test('falls back safely when shoulder width is zero', () => {
+  const pose = [...model.samples[0]];
+  pose.splice(12 * 3, 3, ...pose.slice(11 * 3, 11 * 3 + 3));
+  assert.doesNotThrow(() => predictKnn(pose, model));
+});
+
+test('stabilizes predictions over the responsive 20-frame window', () => {
   const stabilizer = new PoseStabilizer();
-  for (let frame = 0; frame < 59; frame += 1) {
+  for (let frame = 0; frame < 19; frame += 1) {
     assert.equal(stabilizer.add('one'), undefined);
   }
   assert.equal(stabilizer.add('one'), 'one');
@@ -37,11 +51,11 @@ test('requires the configured share of the window before accepting a pose', () =
   const belowThreshold = new PoseStabilizer();
   const atThreshold = new PoseStabilizer();
 
-  for (let frame = 0; frame < 60; frame += 1) {
-    belowThreshold.add(frame < 47 ? 'one' : 'zero');
+  for (let frame = 0; frame < 20; frame += 1) {
+    belowThreshold.add(frame < 12 ? 'one' : 'zero');
   }
-  for (let frame = 0; frame < 59; frame += 1) {
-    atThreshold.add(frame < 48 ? 'one' : 'zero');
+  for (let frame = 0; frame < 19; frame += 1) {
+    atThreshold.add(frame < 13 ? 'one' : 'zero');
   }
 
   assert.equal(belowThreshold.add('zero'), null);
